@@ -232,4 +232,4 @@ if __name__ == "__main__":
     app.config['SECRET_KEY'] = b'_5#y2L"F4Q8z\n\xec]/'
     mysess = Session()
     mysess.init_app(app)
-    app.run(debug=True)
+    app.run()
