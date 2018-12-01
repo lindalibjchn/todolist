@@ -6,6 +6,7 @@ from flask_ckeditor import CKEditor
 import yaml
 import os
 import datetime
+from flask import send_from_directory
 # from whoosh.analysis import StemmingAnalyzer
 # import flask_whooshalchemy
 
@@ -23,6 +24,12 @@ app.config['MYSQL_DATABASE_USER'] = db['mysql_user']
 app.config['MYSQL_DATABASE_PASSWORD'] = db['mysql_password']
 app.config['MYSQL_DATABASE_DB'] = db['mysql_db']
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -75,7 +82,7 @@ def tasklist(category):
             sql = "SELECT t.LIST_ID, t.LIST_TITLE, t.LIST_STATUS, t.LIST_DUEDATE, u.USER_NAME FROM todolist as t LEFT JOIN user as u " \
                 "ON t.LIST_USERID = u.USER_ID WHERE t.LIST_TITLE = '%" + \
                 _tasksearch + "%' AND u.USER_ID = '" + session['user_id'] + "'"
-                
+
     print(sql)
     cnn = mysql.connect()
     cur = cnn.cursor()
@@ -227,9 +234,11 @@ def signup():
             return redirect('/')
     return render_template('signup.html')
 
+
 if __name__ == "__main__":
     app.config['SESSION_TYPE'] = 'filesystem'
     app.config['SECRET_KEY'] = b'_5#y2L"F4Q8z\n\xec]/'
+
     mysess = Session()
     mysess.init_app(app)
     app.run()
