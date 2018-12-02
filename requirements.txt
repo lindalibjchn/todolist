@@ -1,5 +1,6 @@
-FLask
-Flask-RESTful
-FLask-JWT
-Flask-SQLAlchemy
+flask
+flask_bootstrap
+flask_session
+flask-mysql
+pyyaml
 uwsgi
