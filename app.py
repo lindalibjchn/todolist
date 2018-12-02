@@ -6,13 +6,15 @@ from flask_ckeditor import CKEditor
 import yaml
 import os
 import datetime
-from flask import send_from_directory
 # from whoosh.analysis import StemmingAnalyzer
 # import flask_whooshalchemy
 
 # initial global parameters
 mysql = MySQL()
-application = app = Flask(__name__)
+app = Flask(__name__)
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SECRET_KEY'] = b'_5#y2L"F4Q8z\n\xec]/'
+
 db = yaml.load(open('./config/db.yaml'))
 mysql.init_app(app)
 Bootstrap(app)
@@ -24,12 +26,6 @@ app.config['MYSQL_DATABASE_USER'] = db['mysql_user']
 app.config['MYSQL_DATABASE_PASSWORD'] = db['mysql_password']
 app.config['MYSQL_DATABASE_DB'] = db['mysql_db']
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
-
-
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -236,9 +232,6 @@ def signup():
 
 
 if __name__ == "__main__":
-    app.config['SESSION_TYPE'] = 'filesystem'
-    app.config['SECRET_KEY'] = b'_5#y2L"F4Q8z\n\xec]/'
-
     mysess = Session()
     mysess.init_app(app)
     app.run()
